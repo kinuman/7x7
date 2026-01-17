@@ -7,6 +7,8 @@ import { BookOpen, Flame, TrendingUp, Target } from "lucide-react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useLearningProgress } from "@/contexts/LearningProgressContext";
+import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import { supabase } from "@/lib/supabase";
 
 /**
  * ダッシュボード画面
@@ -15,6 +17,7 @@ import { useLearningProgress } from "@/contexts/LearningProgressContext";
 export default function Dashboard() {
   const { userStats, getGradeProgress } = useLearningProgress();
   const [selectedGrade, setSelectedGrade] = useState<string>("5");
+  const { user } = useSupabaseAuth();
 
   const grades = ["5", "4", "3", "準2", "2", "準1", "1"];
 
@@ -45,7 +48,21 @@ export default function Dashboard() {
             </a>
           </Link>
           <div className="flex gap-4 items-center">
-            <span className="text-sm text-gray-600">ゲストユーザー</span>
+            <span className="text-sm text-gray-600">
+              {user?.email || "ゲストユーザー"}
+            </span>
+            {user && (
+              <Button size="sm" variant="outline" onClick={() => supabase.auth.signOut()}>
+                ログアウト
+              </Button>
+            )}
+            {!user && (
+              <Link href="/login">
+                <a>
+                  <Button size="sm" variant="default">ログイン</Button>
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       </nav>

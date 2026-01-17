@@ -5,9 +5,11 @@ import Home from "@/pages/Home";
 import Dashboard from "@/pages/Dashboard";
 import SevenBySevenPractice from "@/pages/SevenBySevenPractice";
 import EikenPractice from "@/pages/EikenPractice";
+import SignIn from "@/pages/SignIn";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { SupabaseAuthProvider } from "./contexts/SupabaseAuthContext";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -18,6 +20,7 @@ function Router() {
       <Route path="/eiken/:grade" component={EikenPractice} />
       <Route path="/study/:grade/:topicId" component={SevenBySevenPractice} />
       <Route path="/study/:grade" component={Dashboard} />
+      <Route path="/login" component={SignIn} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -37,10 +40,12 @@ function App() {
         defaultTheme="light"
         // switchable
       >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <SupabaseAuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </SupabaseAuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
