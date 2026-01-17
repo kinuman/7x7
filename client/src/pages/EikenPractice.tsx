@@ -19,7 +19,7 @@ import { LearningQuestion, QuestionType, EikenGrade } from "@shared/types";
 import EikenMultipleChoice from "@/components/EikenMultipleChoice";
 import EikenReorder from "@/components/EikenReorder";
 import VoicePractice from "@/components/VoicePractice";
-import { getGrammarQuestionsByGrade } from "@/lib/grammarTopicsData";
+import { getGrammarQuestionsByGrade, grammarTopics } from "@/lib/grammarTopicsData";
 
 interface EikenPracticeProps {}
 
@@ -89,6 +89,15 @@ export default function EikenPractice({}: EikenPracticeProps) {
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const remaining = Math.max(questions.length - (currentQuestionIndex + 1), 0);
+  const topic = currentQuestion ? grammarTopics.find(t => t.id === currentQuestion.topicId) : undefined;
+  const difficultyLabel = currentQuestion?.difficulty === "easy" ? "やさしい" : currentQuestion?.difficulty === "medium" ? "ふつう" : "むずかしい";
+  const timelineLabel = (pos: string | undefined) => {
+    if (pos === "past") return "過去";
+    if (pos === "present") return "現在";
+    if (pos === "future") return "未来";
+    return "時制";
+  };
 
   const handleAnswer = (questionId: string, answer: string | string[], isCorrect: boolean) => {
     const timeSpent = Math.round((Date.now() - startTime) / 1000);
@@ -101,7 +110,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
     
     // Move to next question or show results
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev: number) => prev + 1);
       setStartTime(Date.now());
     } else {
       setShowResults(true);
@@ -120,7 +129,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
     }]);
     
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev: number) => prev + 1);
       setStartTime(Date.now());
     } else {
       setShowResults(true);
@@ -129,7 +138,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev: number) => prev + 1);
       setStartTime(Date.now());
     } else {
       setShowResults(true);
@@ -145,7 +154,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
   };
 
   const correctAnswers = answers.filter(a => a.isCorrect).length;
-  const totalTime = answers.reduce((sum, a) => sum + a.timeSpent, 0);
+  const totalTime = answers.reduce((sum: number, a) => sum + a.timeSpent, 0);
   const accuracy = answers.length > 0 ? Math.round((correctAnswers / answers.length) * 100) : 0;
 
   const renderQuestion = () => {
@@ -359,9 +368,81 @@ export default function EikenPractice({}: EikenPracticeProps) {
         </div>
       </div>
 
-      {/* Question Content */}
+      <div className="bg-white">
+        <div className="container mx-auto px-4 py-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="p-3 rounded-lg bg-blue-50 flex items-center justify-between">
+              <span className="text-xs text-blue-700">級</span>
+              <span className="text-sm font-semibold text-blue-900">{grade}級</span>
+            </div>
+            <div className="p-3 rounded-lg bg-green-50 flex items-center justify-between">
+              <span className="text-xs text-green-700">難易度</span>
+              <span className="text-sm font-semibold text-green-900">{difficultyLabel}</span>
+            </div>
+            <div className="p-3 rounded-lg bg-purple-50 flex items-center justify-between">
+              <span className="text-xs text-purple-700">残り</span>
+              <span className="text-sm font-semibold text-purple-900">{remaining}</span>
+            </div>
+            <div className="p-3 rounded-lg bg-orange-50 flex items-center justify-between">
+              <span className="text-xs text-orange-700">時制</span>
+              <span className="text-sm font-semibold text-orange-900">
+                {timelineLabel(topic?.timelinePosition || (currentQuestion as any)?.timelineHint)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
-        {renderQuestion()}
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            {renderQuestion()}
+            <div className="mt-4 flex gap-3">
+              <Button variant="secondary" onClick={handleNextQuestion}>
+                Skip
+              </Button>
+              <Button variant="outline" onClick={() => setCurrentQuestionIndex(prev => prev)}>
+                Flag
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {topic ? topic.title : "文法情報"}
+                </CardTitle>
+                <CardDescription>
+                  {topic ? topic.description : "この問題の関連情報"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">級</span>
+                  <span className="text-sm font-semibold text-gray-900">{topic?.grade || grade}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">時制</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {timelineLabel(topic?.timelinePosition || (currentQuestion as any)?.timelineHint)}
+                  </span>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">ポイント</h4>
+                  <p className="text-sm text-gray-700">
+                    {topic?.explanation || "この問題は時制や用法の理解を問います。"}
+                  </p>
+                </div>
+                {topic?.examples?.[0] && (
+                  <div className="p-3 rounded-lg bg-gray-50">
+                    <p className="text-sm font-medium text-gray-900">{topic.examples[0].english}</p>
+                    <p className="text-xs text-gray-600 mt-1">{topic.examples[0].japanese}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
