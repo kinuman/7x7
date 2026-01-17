@@ -156,6 +156,25 @@ export const grammarTopics: GrammarTopic[] = [
     ],
   },
 
+  {
+    id: "3-verb-inf-ger-meaning",
+    title: "動詞+不定詞/動名詞の意味の違い",
+    description: "stop・remember・try などの意味差",
+    grade: "3",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation:
+      "一部の動詞は不定詞と動名詞で意味が変わります。stop to do は『～するために止まる』、stop doing は『～するのをやめる』など。",
+    examples: [
+      { english: "I stopped to smoke.", japanese: "私はタバコを吸うために立ち止まった。" },
+      { english: "I stopped smoking.", japanese: "私は喫煙をやめた。" },
+      { english: "I remembered to call her.", japanese: "彼女に電話するのを覚えていて実際に電話した。" },
+      { english: "I remember calling her.", japanese: "彼女に電話したことを覚えている。" },
+      { english: "He tried to open the door.", japanese: "彼はドアを開けようと試みた。" },
+      { english: "He tried opening the door.", japanese: "彼はドアを開けることを試しにやってみた。" },
+    ],
+  },
+
   // ==================== 英検準2級 ====================
 
   {
@@ -544,7 +563,7 @@ function getSentencePool(grade: EikenGrade, timelinePosition: string): SentenceP
 
 const QUESTIONS_PER_TOPIC = 48;
 
-export const eikenGrammarQuestions: LearningQuestion[] = grammarTopics.flatMap((topic, topicIndex) => {
+const baseEikenGrammarQuestions: LearningQuestion[] = grammarTopics.flatMap((topic, topicIndex) => {
   const questions: LearningQuestion[] = [];
   const sentencePool = getSentencePool(topic.grade, topic.timelinePosition);
   const baseId = `grammar-${topic.id}`;
@@ -656,3 +675,101 @@ export const eikenGrammarQuestions: LearningQuestion[] = grammarTopics.flatMap((
 export function getGrammarQuestionsByGrade(grade: EikenGrade): LearningQuestion[] {
   return eikenGrammarQuestions.filter((q) => q.grade === grade);
 }
+
+const specialQuestions: LearningQuestion[] = [
+  {
+    id: "grammar-3-verb-inf-ger-meaning-1",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ I stopped smoking.",
+    options: [
+      { id: "a", text: "私は喫煙をやめた。", isCorrect: true, explanation: "stop + doing は『～するのをやめる』。" },
+      { id: "b", text: "私はタバコを吸うために立ち止まった。", isCorrect: false, explanation: "それは stop to smoke の意味。" },
+      { id: "c", text: "私はタバコを吸い始めた。", isCorrect: false, explanation: "意味が逆。" },
+    ],
+    explanation: "stop + 動名詞は行為の中止を表す。",
+    difficulty: "medium",
+    timelineHint: "present",
+  },
+  {
+    id: "grammar-3-verb-inf-ger-meaning-2",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ I stopped to smoke.",
+    options: [
+      { id: "a", text: "私は喫煙をやめた。", isCorrect: false, explanation: "それは stop smoking の意味。" },
+      { id: "b", text: "私はタバコを吸うために立ち止まった。", isCorrect: true, explanation: "stop to do は『目的のために止まる』。" },
+      { id: "c", text: "私はタバコを吸おうと試みた。", isCorrect: false, explanation: "try to smoke のニュアンス。" },
+    ],
+    explanation: "stop + 不定詞はその目的のために一時停止することを表す。",
+    difficulty: "medium",
+    timelineHint: "present",
+  },
+  {
+    id: "grammar-3-verb-inf-ger-meaning-3",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ I remembered to call her.",
+    options: [
+      { id: "a", text: "彼女に電話したことを覚えている。", isCorrect: false, explanation: "remember doing の意味。" },
+      { id: "b", text: "彼女に電話するのを覚えていて、実際に電話した。", isCorrect: true, explanation: "remember to do は『忘れずに～した』。" },
+      { id: "c", text: "彼女に電話するのを忘れた。", isCorrect: false, explanation: "forget to call の意味。" },
+    ],
+    explanation: "remember + 不定詞は『これから行う予定を覚えている』、結果として実行したことを示す。",
+    difficulty: "easy",
+    timelineHint: "present",
+  },
+  {
+    id: "grammar-3-verb-inf-ger-meaning-4",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ I remember calling her.",
+    options: [
+      { id: "a", text: "彼女に電話したことを覚えている。", isCorrect: true, explanation: "remember doing は『過去の経験の記憶』。" },
+      { id: "b", text: "彼女に電話するのを覚えていて実際に電話した。", isCorrect: false, explanation: "remember to do の意味。" },
+      { id: "c", text: "彼女に電話するのを忘れた。", isCorrect: false, explanation: "forget to call の意味。" },
+    ],
+    explanation: "remember + 動名詞は過去に行ったことの記憶を表す。",
+    difficulty: "easy",
+    timelineHint: "present",
+  },
+  {
+    id: "grammar-3-verb-inf-ger-meaning-5",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ He tried to open the door.",
+    options: [
+      { id: "a", text: "彼はドアを開けようと試みた。", isCorrect: true, explanation: "try to do は『努力して試みる』。" },
+      { id: "b", text: "彼はドアを開けることを試しにやってみた。", isCorrect: false, explanation: "try doing の意味。" },
+      { id: "c", text: "彼はドアを開けるのをやめた。", isCorrect: false, explanation: "stop opening の意味。" },
+    ],
+    explanation: "try + 不定詞は目標達成のための試みを表す。",
+    difficulty: "medium",
+    timelineHint: "present",
+  },
+  {
+    id: "grammar-3-verb-inf-ger-meaning-6",
+    topicId: "3-verb-inf-ger-meaning",
+    grade: "3",
+    questionType: "multiple-choice",
+    question: "次の英文の意味として最も近いものはどれですか？ He tried opening the door.",
+    options: [
+      { id: "a", text: "彼はドアを開けるのをやめた。", isCorrect: false, explanation: "stop opening の意味。" },
+      { id: "b", text: "彼はドアを開けようと試みた。", isCorrect: false, explanation: "try to open の意味。" },
+      { id: "c", text: "彼はドアを開けることを試しにやってみた。", isCorrect: true, explanation: "try doing は『実験的に試す』。" },
+    ],
+    explanation: "try + 動名詞は方法の一つとして試してみるニュアンス。",
+    difficulty: "medium",
+    timelineHint: "present",
+  },
+];
+
+export const eikenGrammarQuestions: LearningQuestion[] = [
+  ...baseEikenGrammarQuestions,
+  ...specialQuestions,
+];
