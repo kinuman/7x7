@@ -6,6 +6,7 @@ import Dashboard from "@/pages/Dashboard";
 import SevenBySevenPractice from "@/pages/SevenBySevenPractice";
 import EikenPractice from "@/pages/EikenPractice";
 import SignIn from "@/pages/SignIn";
+import Flashcards from "@/pages/Flashcards";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/eiken/:grade" component={EikenPractice} />
+      <Route path="/flashcards/:grade" component={Flashcards} />
       <Route path="/study/:grade/:topicId" component={SevenBySevenPractice} />
       <Route path="/study/:grade" component={Dashboard} />
       <Route path="/login" component={SignIn} />
