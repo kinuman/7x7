@@ -5,20 +5,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { 
-  ArrowLeft, 
-  Clock, 
-  CheckCircle, 
-  Target, 
+import {
+  ArrowLeft,
+  Clock,
+  CheckCircle,
+  Target,
   BookOpen,
   Volume2,
-  RotateCcw
+  RotateCcw,
 } from "lucide-react";
 import { useLearningProgress } from "@/contexts/LearningProgressContext";
 import { LearningQuestion, QuestionType, EikenGrade } from "@shared/types";
 import EikenMultipleChoice from "@/components/EikenMultipleChoice";
 import EikenReorder from "@/components/EikenReorder";
 import VoicePractice from "@/components/VoicePractice";
+import { getGrammarQuestionsByGrade } from "@/lib/grammarTopicsData";
 
 interface EikenPracticeProps {}
 
@@ -66,9 +67,19 @@ const VOICE_PHRASES = [
   { english: "They decided to go home", japanese: "彼らは家に帰ることに決めました" },
 ];
 
+const getQuestionsForGrade = (grade: EikenGrade | undefined): LearningQuestion[] => {
+  const targetGrade = grade || "5";
+  const grammarQuestions = getGrammarQuestionsByGrade(targetGrade);
+  if (grammarQuestions.length > 0) {
+    return grammarQuestions;
+  }
+  return SAMPLE_QUESTIONS;
+};
+
 export default function EikenPractice({}: EikenPracticeProps) {
-  const { grade } = useParams<{ grade: string }>();
+  const { grade } = useParams<{ grade: EikenGrade }>();
   const { recordAnswer } = useLearningProgress();
+  const questions = getQuestionsForGrade(grade);
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Array<{questionId: string; isCorrect: boolean; timeSpent: number}>>([]);
@@ -76,10 +87,10 @@ export default function EikenPractice({}: EikenPracticeProps) {
   const [showResults, setShowResults] = useState(false);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(0);
 
-  const currentQuestion = SAMPLE_QUESTIONS[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / SAMPLE_QUESTIONS.length) * 100;
+  const currentQuestion = questions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
-  const handleAnswer = (questionId: string, answer: string, isCorrect: boolean) => {
+  const handleAnswer = (questionId: string, answer: string | string[], isCorrect: boolean) => {
     const timeSpent = Math.round((Date.now() - startTime) / 1000);
     
     // Record answer in learning progress
@@ -89,7 +100,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
     setAnswers(prev => [...prev, { questionId, isCorrect, timeSpent }]);
     
     // Move to next question or show results
-    if (currentQuestionIndex < SAMPLE_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setStartTime(Date.now());
     } else {
@@ -108,7 +119,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
       timeSpent 
     }]);
     
-    if (currentQuestionIndex < SAMPLE_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setStartTime(Date.now());
     } else {
@@ -117,7 +128,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < SAMPLE_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setStartTime(Date.now());
     } else {
@@ -256,9 +267,9 @@ export default function EikenPractice({}: EikenPracticeProps) {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-3">Performance by Type</h3>
                   <div className="space-y-2">
-                    {["multiple-choice", "reorder", "voice"].map((type, index) => {
+                    {["multiple-choice", "reorder", "fill-blank"].map((type, index) => {
                       const typeAnswers = answers.filter((_, i) => 
-                        SAMPLE_QUESTIONS[i]?.questionType === type
+                        questions[i]?.questionType === type
                       );
                       const typeCorrect = typeAnswers.filter(a => a.isCorrect).length;
                       const typeAccuracy = typeAnswers.length > 0 ? 
@@ -338,7 +349,7 @@ export default function EikenPractice({}: EikenPracticeProps) {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-600">
-              Question {currentQuestionIndex + 1} of {SAMPLE_QUESTIONS.length}
+              Question {currentQuestionIndex + 1} of {questions.length}
             </span>
             <span className="text-sm font-medium text-gray-900">
               {Math.round(progress)}% Complete

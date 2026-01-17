@@ -1,9 +1,4 @@
-/**
- * 英検5級〜1級の文法トピックデータ
- * 各級の主要な文法トピックを定義
- */
-
-import { GrammarTopic } from "@shared/types";
+import { GrammarTopic, LearningQuestion, EikenGrade } from "@shared/types";
 
 export const grammarTopics: GrammarTopic[] = [
   // ==================== 英検5級 ====================
@@ -381,4 +376,101 @@ export function getTopicsByGrammarType(grammarType: string): GrammarTopic[] {
  */
 export function getTopicsByTimeline(timelinePosition: string): GrammarTopic[] {
   return grammarTopics.filter((topic) => topic.timelinePosition === timelinePosition);
+}
+
+function getDifficultyForGrade(grade: EikenGrade): "easy" | "medium" | "hard" {
+  if (grade === "5" || grade === "4") return "easy";
+  if (grade === "3" || grade === "準2") return "medium";
+  return "hard";
+}
+
+function getTimelineLabel(timelinePosition: string): string {
+  switch (timelinePosition) {
+    case "past":
+      return "過去の出来事を表す表現です。";
+    case "present":
+      return "現在の状態や習慣を表す表現です。";
+    case "future":
+      return "未来の予定や可能性を表す表現です。";
+    default:
+      return "時間の流れに関する一般的な表現です。";
+  }
+}
+
+export const eikenGrammarQuestions: LearningQuestion[] = grammarTopics.flatMap((topic) => {
+  const questions: LearningQuestion[] = [];
+  const baseId = `grammar-${topic.id}`;
+  const difficulty = getDifficultyForGrade(topic.grade);
+
+  const example = topic.examples[0];
+
+  if (example) {
+    questions.push({
+      id: `${baseId}-1`,
+      topicId: topic.id,
+      grade: topic.grade,
+      questionType: "multiple-choice",
+      question: `「${example.english}」の意味として最も近いものはどれですか？`,
+      options: [
+        {
+          id: "a",
+          text: example.japanese,
+          isCorrect: true,
+          explanation: "正しい日本語訳です。",
+        },
+        {
+          id: "b",
+          text: "意味が少し異なる文",
+          isCorrect: false,
+          explanation: "文の意味が異なります。",
+        },
+        {
+          id: "c",
+          text: "文法的に不自然な文",
+          isCorrect: false,
+          explanation: "自然な日本語ではありません。",
+        },
+      ],
+      explanation: topic.explanation,
+      difficulty,
+      timelineHint: topic.timelinePosition,
+    });
+  }
+
+  questions.push({
+    id: `${baseId}-2`,
+    topicId: topic.id,
+    grade: topic.grade,
+    questionType: "multiple-choice",
+    question: `文法「${topic.title}」が表す時間のイメージとして最も近いものはどれですか？`,
+    options: [
+      {
+        id: "a",
+        text: "過去の出来事を中心にした表現",
+        isCorrect: topic.timelinePosition === "past",
+        explanation: "past は過去の出来事を表します。",
+      },
+      {
+        id: "b",
+        text: "今この瞬間や普段の状態を表す表現",
+        isCorrect: topic.timelinePosition === "present",
+        explanation: "present は現在の状態や習慣を表します。",
+      },
+      {
+        id: "c",
+        text: "これから起こることや可能性を表す表現",
+        isCorrect: topic.timelinePosition === "future",
+        explanation: "future は未来のことを表します。",
+      },
+    ],
+    explanation: getTimelineLabel(topic.timelinePosition),
+    difficulty,
+    timelineHint: topic.timelinePosition,
+  });
+
+  return questions;
+});
+
+export function getGrammarQuestionsByGrade(grade: EikenGrade): LearningQuestion[] {
+  return eikenGrammarQuestions.filter((q) => q.grade === grade);
 }

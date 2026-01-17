@@ -151,7 +151,7 @@ export default function Dashboard() {
                   const progressPercentage = (progress.completed / progress.total) * 100;
 
                   return (
-                    <div key={grade}>
+                  <div key={grade}>
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <h3 className="font-semibold text-gray-900">{grade}級</h3>
@@ -172,6 +172,13 @@ export default function Dashboard() {
                         </Link>
                       </div>
                       <Progress value={progressPercentage} className="h-2" />
+                      <div className="mt-2 text-xs text-blue-600">
+                        <Link href={`/eiken/${grade}`}>
+                          <a className="underline">
+                            英検形式の文法問題に挑戦
+                          </a>
+                        </Link>
+                      </div>
                     </div>
                   );
                 })}

@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import Home from "@/pages/Home";
 import Dashboard from "@/pages/Dashboard";
 import SevenBySevenPractice from "@/pages/SevenBySevenPractice";
+import EikenPractice from "@/pages/EikenPractice";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -14,6 +15,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/eiken/:grade" component={EikenPractice} />
       <Route path="/study/:grade/:topicId" component={SevenBySevenPractice} />
       <Route path="/study/:grade" component={Dashboard} />
       <Route path="/404" component={NotFound} />
