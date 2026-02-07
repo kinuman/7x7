@@ -225,6 +225,100 @@ export const grammarTopics: GrammarTopic[] = [
     ],
   },
 
+  {
+    id: "pre2-vocab-cloze",
+    title: "語彙選択（準2級）",
+    description: "文脈に合う語を選ぶ",
+    grade: "準2",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "文脈に最も合う語を選ぶ練習です。",
+    examples: [
+      { english: "The company decided to expand its business into Asia.", japanese: "その会社は事業をアジアへ拡大することを決めた。" },
+      { english: "You should consult a doctor if the pain continues.", japanese: "痛みが続くなら医者に相談すべきだ。" },
+    ],
+  },
+
+  {
+    id: "2-vocab-cloze",
+    title: "語彙選択（2級）",
+    description: "より高度な語彙の選択",
+    grade: "2",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "抽象的・学術的な語彙を文脈で選ぶ練習です。",
+    examples: [
+      { english: "The policy had a significant impact on the economy.", japanese: "その政策は経済に大きな影響を与えた。" },
+      { english: "Walking is beneficial for your health.", japanese: "歩くことは健康に有益です。" },
+    ],
+  },
+
+  {
+    id: "3-vocab-cloze",
+    title: "語彙選択（3級）",
+    description: "日常語彙の選択",
+    grade: "3",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "日常場面でよく使う語を文脈で選ぶ練習です。",
+    examples: [
+      { english: "She participated in the school festival.", japanese: "彼女は学校祭に参加した。" },
+      { english: "He is interested in Japanese history.", japanese: "彼は日本史に興味がある。" },
+    ],
+  },
+
+  {
+    id: "4-vocab-cloze",
+    title: "語彙選択（4級）",
+    description: "基本語彙の選択",
+    grade: "4",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "基本語彙を文脈で選ぶ練習です。",
+    examples: [
+      { english: "The shop is located near the station.", japanese: "その店は駅の近くにある。" },
+    ],
+  },
+
+  {
+    id: "5-vocab-cloze",
+    title: "語彙選択（5級）",
+    description: "初歩語彙の選択",
+    grade: "5",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "初歩的な語彙を文脈で選ぶ練習です。",
+    examples: [
+      { english: "The dictionary is useful for learners.", japanese: "この辞書は学習者に役立つ。" },
+    ],
+  },
+
+  {
+    id: "pre1-vocab-cloze",
+    title: "語彙選択（準1級）",
+    description: "高度語彙の選択",
+    grade: "準1",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "高度な抽象語彙を文脈で選ぶ練習です。",
+    examples: [
+      { english: "The committee will decide on the winner tomorrow.", japanese: "委員会は明日、勝者を決定する。" },
+    ],
+  },
+
+  {
+    id: "1-vocab-cloze",
+    title: "語彙選択（1級）",
+    description: "最上級語彙の選択",
+    grade: "1",
+    grammarType: "both",
+    timelinePosition: "present",
+    explanation: "高度で専門的な語彙を文脈で選ぶ練習です。",
+    examples: [
+      { english: "He expressed his feelings through music.", japanese: "彼は音楽を通して感情を表現した。" },
+    ],
+  },
+
   // ==================== 英検2級 ====================
 
   {
@@ -769,7 +863,116 @@ const specialQuestions: LearningQuestion[] = [
   },
 ];
 
+type ClozeItem = { sentence: string; correct: string; distractor: string; meaning: string };
+
+const vocabClozeByGrade: Record<EikenGrade, ClozeItem[]> = {
+  "準2": [
+    { sentence: "The company decided to _____ its business into Asia.", correct: "expand", distractor: "shrink", meaning: "〜を拡大する" },
+    { sentence: "The government is taking steps to _____ the environment.", correct: "protect", distractor: "destroy", meaning: "〜を保護する" },
+    { sentence: "You should _____ a doctor if the pain continues.", correct: "consult", distractor: "ignore", meaning: "相談する・診察を受ける" },
+    { sentence: "The new technology has a great _____ on our lives.", correct: "impact", distractor: "indifference", meaning: "影響・衝撃" },
+    { sentence: "He _____ his goal of becoming a lawyer.", correct: "achieved", distractor: "failed", meaning: "〜を達成する" },
+    { sentence: "It is _____ to wear a seatbelt while driving.", correct: "necessary", distractor: "optional", meaning: "必要不可欠な" },
+    { sentence: "Many people _____ money to the charity.", correct: "contribute", distractor: "take", meaning: "寄付する・貢献する" },
+    { sentence: "The scientist _____ a new species of insect.", correct: "discovered", distractor: "hid", meaning: "〜を発見する" },
+    { sentence: "We need to _____ the amount of plastic waste.", correct: "reduce", distractor: "increase", meaning: "〜を減らす" },
+    { sentence: "The hotel offers a _____ of services for guests.", correct: "variety", distractor: "lack", meaning: "多様・種類" },
+    { sentence: "I'm _____ seeing you again.", correct: "looking forward to", distractor: "afraid of", meaning: "〜を楽しみに待つ" },
+    { sentence: "He had to _____ his trip due to a sudden illness.", correct: "cancel", distractor: "confirm", meaning: "〜を中止する" },
+    { sentence: "The student _____ his English skills by studying hard.", correct: "improved", distractor: "worsened", meaning: "〜を向上させる" },
+    { sentence: "Technology _____ us to communicate instantly.", correct: "enables", distractor: "prevents", meaning: "〜することを可能にする" },
+    { sentence: "Please _____ us with your contact information.", correct: "provide", distractor: "take", meaning: "〜を提供する" },
+    { sentence: "It is _____ to predict the weather accurately.", correct: "difficult", distractor: "easy", meaning: "困難な" },
+    { sentence: "She _____ the school festival.", correct: "participated in", distractor: "avoided", meaning: "〜に参加する" },
+    { sentence: "The company _____ electric cars.", correct: "produces", distractor: "buys", meaning: "〜を生産する" },
+    { sentence: "The price of vegetables _____ the season.", correct: "depends on", distractor: "regardless of", meaning: "〜次第である" },
+    { sentence: "Walking is _____ for your health.", correct: "beneficial", distractor: "harmful", meaning: "有益な" },
+    { sentence: "The manager _____ the importance of teamwork.", correct: "emphasized", distractor: "forgot", meaning: "〜を強調する" },
+    { sentence: "I _____ you to try something new.", correct: "encourage", distractor: "discourage", meaning: "〜するよう勧める・励ます" },
+    { sentence: "The museum is _____ its ancient statues.", correct: "famous for", distractor: "unknown to", meaning: "〜で有名だ" },
+    { sentence: "The population of the city is _____ every year.", correct: "increasing", distractor: "decreasing", meaning: "増えている" },
+    { sentence: "The police are _____ the cause of the fire.", correct: "investigating", distractor: "ignoring", meaning: "〜を調査する" },
+    { sentence: "He _____ the offer to work overtime.", correct: "refused", distractor: "accepted", meaning: "〜を拒否する" },
+    { sentence: "They _____ their opinions during the meeting.", correct: "shared", distractor: "kept", meaning: "〜を共有する" },
+    { sentence: "The medicine will _____ your pain.", correct: "relieve", distractor: "cause", meaning: "〜を和らげる" },
+    { sentence: "It's _____ to have a good plan for success.", correct: "essential", distractor: "useless", meaning: "極めて重要な" },
+    { sentence: "The factory was _____ due to the financial crisis.", correct: "closed", distractor: "opened", meaning: "閉鎖された" },
+    { sentence: "The library is a quiet _____ for studying.", correct: "environment", distractor: "noise", meaning: "環境" },
+    { sentence: "We should _____ other people's cultures.", correct: "respect", distractor: "look down on", meaning: "〜を尊重する" },
+    { sentence: "The internet is a _____ source of information.", correct: "valuable", distractor: "worthless", meaning: "価値のある" },
+    { sentence: "He was _____ the project.", correct: "responsible for", distractor: "free from", meaning: "〜に対して責任がある" },
+    { sentence: "The law _____ smoking in public places.", correct: "prohibits", distractor: "allows", meaning: "〜を禁止する" },
+    { sentence: "The sun _____ us with heat and light.", correct: "provides", distractor: "absorbs", meaning: "〜を与える" },
+    { sentence: "They are _____ the missing cat.", correct: "searching for", distractor: "hiding", meaning: "〜を探している" },
+    { sentence: "The results will be _____ next week.", correct: "announced", distractor: "kept secret", meaning: "発表される" },
+    { sentence: "He is _____ Japanese history.", correct: "interested in", distractor: "bored with", meaning: "〜に興味がある" },
+    { sentence: "This app is very _____ for travelers.", correct: "convenient", distractor: "troublesome", meaning: "便利な" },
+    { sentence: "The event was _____ because of rain.", correct: "postponed", distractor: "held", meaning: "延期された" },
+    { sentence: "She _____ passing the exam.", correct: "succeeded in", distractor: "failed to", meaning: "〜に成功する" },
+    { sentence: "The task was _____ on time.", correct: "completed", distractor: "started", meaning: "完了した" },
+    { sentence: "Please _____ this application form.", correct: "fill out", distractor: "throw away", meaning: "〜に記入する" },
+    { sentence: "They _____ with my proposal.", correct: "agreed", distractor: "disagreed", meaning: "同意した" },
+    { sentence: "The shop is _____ near the station.", correct: "located", distractor: "moving", meaning: "位置している" },
+    { sentence: "Exercise can _____ many illnesses.", correct: "prevent", distractor: "cause", meaning: "〜を予防する" },
+    { sentence: "He _____ his feelings through music.", correct: "expressed", distractor: "hid", meaning: "〜を表現する" },
+    { sentence: "This dictionary is _____ for learners.", correct: "useful", distractor: "useless", meaning: "役に立つ" },
+    { sentence: "The committee will _____ on the winner tomorrow.", correct: "decide", distractor: "wait", meaning: "決定する" },
+  ],
+  "2": [
+    { sentence: "The policy had a significant _____ on the economy.", correct: "impact", distractor: "indifference", meaning: "影響" },
+    { sentence: "The manager _____ the need for innovation.", correct: "emphasized", distractor: "ignored", meaning: "強調する" },
+  ],
+  "3": [
+    { sentence: "She _____ the marathon last year.", correct: "completed", distractor: "started", meaning: "完了した" },
+    { sentence: "He is _____ math.", correct: "interested in", distractor: "bored with", meaning: "興味がある" },
+  ],
+  "4": [
+    { sentence: "The shop is _____ near the station.", correct: "located", distractor: "moving", meaning: "位置している" },
+    { sentence: "They _____ with my idea.", correct: "agreed", distractor: "disagreed", meaning: "同意した" },
+  ],
+  "5": [
+    { sentence: "This dictionary is _____ for learners.", correct: "useful", distractor: "useless", meaning: "役に立つ" },
+    { sentence: "Please _____ this form.", correct: "fill out", distractor: "throw away", meaning: "記入する" },
+  ],
+  "準1": [
+    { sentence: "The committee will _____ on the winner tomorrow.", correct: "decide", distractor: "wait", meaning: "決定する" },
+    { sentence: "Walking is _____ for your health.", correct: "beneficial", distractor: "harmful", meaning: "有益な" },
+  ],
+  "1": [
+    { sentence: "He _____ his feelings through music.", correct: "expressed", distractor: "hid", meaning: "表現する" },
+    { sentence: "The internet is a _____ source of information.", correct: "valuable", distractor: "worthless", meaning: "価値のある" },
+  ],
+};
+
+function buildVocabClozeQuestions(): LearningQuestion[] {
+  const grades: EikenGrade[] = ["5", "4", "3", "準2", "2", "準1", "1"];
+  const out: LearningQuestion[] = [];
+  for (const g of grades) {
+    const items = vocabClozeByGrade[g] || [];
+    items.forEach((item, i) => {
+      const id = `vocab-${g}-${i + 1}`;
+      const difficulty = getDifficultyForGrade(g);
+      out.push({
+        id,
+        topicId: `${g === "準2" ? "pre2" : g}-vocab-cloze`,
+        grade: g,
+        questionType: "multiple-choice",
+        question: `空欄に最も適切な語を選んでください: ${item.sentence}`,
+        options: [
+          { id: "a", text: item.correct, isCorrect: true, explanation: item.meaning },
+          { id: "b", text: item.distractor, isCorrect: false, explanation: "文脈に合わない語" },
+        ],
+        explanation: item.meaning,
+        difficulty,
+        timelineHint: "present",
+      });
+    });
+  }
+  return out;
+}
+
 export const eikenGrammarQuestions: LearningQuestion[] = [
   ...baseEikenGrammarQuestions,
   ...specialQuestions,
+  ...buildVocabClozeQuestions(),
 ];
