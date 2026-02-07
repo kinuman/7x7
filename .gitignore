@@ -2,7 +2,9 @@ node_modules/
 dist/
 build/
 .env
+.env.local
 __pycache__/
 *.pyc
 .DS_Store
 .vercel
+memu_storage.json
