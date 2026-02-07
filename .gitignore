@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 .vercel
 memu_storage.json
+temp_audio.wav
